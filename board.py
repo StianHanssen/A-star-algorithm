@@ -18,9 +18,10 @@ class Board():
         return self.BOARD_STR
 
     @staticmethod
-    def __get_board_path(file_name):
+    def __get_board_path(file_name, mac=False):
+        folder = "/boards/" if mac else "\\boards\\"
         path = os.path.dirname(os.path.abspath(__file__))
-        path += "\\boards\\" + file_name
+        path += folder + file_name
         return path
 
     @staticmethod
