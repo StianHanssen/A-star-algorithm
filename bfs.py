@@ -20,6 +20,7 @@ def bfs(board):
             return time() - start_time
         for neighbour in board.get_neighbours(node):
             if neighbour not in visited and (neighbour.get_g() > node.get_g() + neighbour.WEIGHT):
+                print(queue)
                 board.update_neightbour(neighbour, node)
                 queue.append(neighbour)
                 visited.add(neighbour)
