@@ -21,7 +21,3 @@ def bfs(board):
                 heappush(queue, neighbour)
     board.print_path()
     return time() - start_time
-if __name__ == '__main__':
-    board = Board("board-2-4.txt", True, True)
-    print(board)
-    print("BFS time: " + str(bfs(board)))

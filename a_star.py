@@ -22,9 +22,3 @@ def A_star(board):
                     else:
                         board.update_neighbour(neighbour, cell)
                         heappush(opened, (neighbour.get_f(), neighbour))
-
-if __name__ == '__main__':
-    board = Board("board-2-3.txt")
-    print(board)
-    time = A_star(board)
-    print("\nA* Time:", time, "s")
