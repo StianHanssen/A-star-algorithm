@@ -84,7 +84,7 @@ class Board():
                     neighbours.append(neighbour)
         return neighbours
 
-    def update_neightbour(self, neighbour, cell):
+    def update_neighbour(self, neighbour, cell):
         neighbour.set_g(cell.get_g() + neighbour.WEIGHT)
         neighbour.set_parent(cell)
 
