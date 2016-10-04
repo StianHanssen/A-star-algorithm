@@ -18,13 +18,13 @@ def A_star(board):
                 if neighbour.WEIGHT is not None and neighbour not in closed:
                     if (neighbour.get_f(), neighbour) in opened:
                         if neighbour.get_g() > cell.get_g() + neighbour.WEIGHT:
-                            board.update_cell(neighbour, cell)
+                            board.update_neighbour(neighbour, cell)
                     else:
-                        board.update_neightbour(neighbour, cell)
+                        board.update_neighbour(neighbour, cell)
                         heappush(opened, (neighbour.get_f(), neighbour))
 
 if __name__ == '__main__':
-    board = Board("board-1-3.txt", True, True)
+    board = Board("board-2-3.txt")
     print(board)
     time = A_star(board)
     print("\nA* Time:", time, "s")
