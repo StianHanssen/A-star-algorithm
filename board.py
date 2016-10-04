@@ -6,11 +6,12 @@ import emoji as em
 __author__ = 'Stian Hanssen'
 
 class Board():
-    def __init__(self, file_name):
+    def __init__(self, file_name, mac=False, emoji=False):
+        self.__EMOJI = emoji
         self.__cells = []
         self.START = None
         self.END = None
-        self.BOARD_STR = Board.__read_file(Board.__get_board_path(file_name))
+        self.BOARD_STR = Board.__read_file(Board.__get_board_path(file_name, mac))
         self.WIDTH = self.__find_width()
         self.__gen_cells(self.BOARD_STR)
         self.HEIGHT = ceil(len(self.__cells) / self.WIDTH)
@@ -98,7 +99,7 @@ class Board():
         path = self.get_path()
         text = list(Board.__clean_up(self.BOARD_STR))
         for x, y in path[1:-1]:
-            text[x + y * self.WIDTH] = em.emojize(':runner:', use_aliases=True)
+            text[x + y * self.WIDTH] = em.emojize(':runner:', use_aliases=True) if self.__EMOJI else "o"
         board = "".join(text)
         for i in range(self.HEIGHT):
             print(board[i*self.WIDTH: i*self.WIDTH + self.WIDTH])
