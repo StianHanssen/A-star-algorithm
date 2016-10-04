@@ -6,7 +6,8 @@ import emoji as em
 __author__ = 'Stian Hanssen'
 
 class Board():
-    def __init__(self, file_name, mac=False, emoji=False):
+    def __init__(self, file_name, default_g=None, default_h=None, mac=False, emoji=False):
+        self.__INPUT = (file_name, default_g, default_h, mac, emoji)
         self.__EMOJI = emoji
         self.__cells = []
         self.START = None
@@ -14,6 +15,8 @@ class Board():
         self.BOARD_STR = Board.__read_file(Board.__get_board_path(file_name, mac))
         self.WIDTH = self.__find_width()
         self.__gen_cells(self.BOARD_STR)
+        self.__set_default_g(default_g)
+        self.__set_default_h(default_h)
         self.HEIGHT = ceil(len(self.__cells) / self.WIDTH)
 
     def __str__(self):
@@ -62,8 +65,18 @@ class Board():
                 self.START = cell
             elif cell.SYMBOL == 'B':
                 self.END = cell
+
+    def __set_default_h(self, h):
         for cell in self.__cells:
-            cell.set_h(self.__get_heuristic(cell))
+            if h is None:
+                cell.set_h(self.__get_heuristic(cell))
+            else:
+                cell.set_h(h)
+
+    def __set_default_g(self, g):
+        if g is not None:
+            for cell in self.__cells:
+                cell.set_g(g)
 
     def __is_cell(self, x, y):
         return (x >= 0 and x < self.WIDTH) and (y >= 0 and y < self.HEIGHT)
@@ -73,6 +86,10 @@ class Board():
 
     def get_cells(self):
         return self.__cells
+
+    def clone(self):
+        file_name, default_g, default_h, mac, emoji = self.__INPUT
+        return Board(file_name, default_g, default_h, mac, emoji)
 
     def get_neighbours(self, cell):
         neighbours = []
@@ -98,11 +115,13 @@ class Board():
         path.reverse()
         return path
 
-    def print_path(self):
+    def get_path_str(self):
         path = self.get_path()
         text = list(Board.__clean_up(self.BOARD_STR))
         for x, y in path[1:-1]:
             text[x + y * self.WIDTH] = em.emojize(':runner:', use_aliases=True) if self.__EMOJI else "o"
         board = "".join(text)
+        path_str = ""
         for i in range(self.HEIGHT):
-            print(board[i*self.WIDTH: i*self.WIDTH + self.WIDTH])
+            path_str += board[i*self.WIDTH: i*self.WIDTH + self.WIDTH] + '\n'
+        return path_str[:-2]
