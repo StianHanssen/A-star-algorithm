@@ -6,10 +6,7 @@ from math import inf
 
 def bfs(board):
     start_time = time()
-    for cell in board.get_cells():
-        cell.set_g(inf)
     board.START.set_g(0)
-
     queue = []
     end = board.END
     heappush(queue, board.START)
@@ -19,5 +16,4 @@ def bfs(board):
             if neighbour.get_g() > cell.get_g() + neighbour.WEIGHT:
                 board.update_neighbour(neighbour, cell)
                 heappush(queue, neighbour)
-    board.print_path()
-    return time() - start_time
+    return time() - start_time, board.get_path_str()
