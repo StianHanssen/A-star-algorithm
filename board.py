@@ -1,6 +1,7 @@
 import os
 from math import floor, ceil
 from cell import Cell
+import emoji as em
 
 __author__ = 'Stian Hanssen'
 
@@ -97,7 +98,7 @@ class Board():
         path = self.get_path()
         text = list(Board.__clean_up(self.BOARD_STR))
         for x, y in path[1:-1]:
-            text[x + y * self.WIDTH] = 'o'
+            text[x + y * self.WIDTH] = em.emojize(':runner:', use_aliases=True)
         board = "".join(text)
         for i in range(self.HEIGHT):
             print(board[i*self.WIDTH: i*self.WIDTH + self.WIDTH])
