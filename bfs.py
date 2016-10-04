@@ -25,6 +25,6 @@ def bfs(board):
                 visited.add(neighbour)
 
 if __name__ == '__main__':
-    board = Board("board-2-1.txt", True, True)
+    board = Board("board-1-3.txt", True, True)
     print(board)
     print("BFS time: " + str(bfs(board)))
