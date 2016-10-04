@@ -1,32 +1,30 @@
-import time
-
-graph = {'A': ['B', 'C'],
-         'B': ['A', 'D', 'E'],
-         'C': ['A', 'F'],
-         'D': ['B', 'C'],
-         'E': ['B', 'F'],
-         'F': ['C', 'E']
-         }
+from time import time
+from board import Board
+from math import inf
 
 
-def bfs(graph, start, end):
-    start_time = time.time()
+def bfs(board):
+    for cell in board.get_cells():
+        cell.set_g(inf)
+    board.START.set_g(0)
+    start_time = time()
 
-    visited = {start: None}
-    queue = [start]
+    visited = set([board.START])
+    queue = [board.START]
+    end = board.END
+
     while queue:
-        print("Queue: " + str(queue))
-        print("Visited: " + str(visited))
         node = queue.pop(0)
         if node == end:
-            path = []
-            while node is not None:
-                path.append(node)
-                node = visited[node]
-            return path[::-1]
-        for neighbour in graph[node]:
-            if neighbour not in visited:
-                visited[neighbour] = node
+            board.print_path()
+            return time() - start_time
+        for neighbour in board.get_neighbours(node):
+            if neighbour not in visited and (neighbour.get_g() > node.get_g() + neighbour.WEIGHT):
+                board.update_neightbour(neighbour, node)
                 queue.append(neighbour)
+                visited.add(neighbour)
 
-print(bfs(graph, 'A', 'F'))
+if __name__ == '__main__':
+    board = Board("board-2-1.txt", True, True)
+    print(board)
+    print("BFS time: " + str(bfs(board)))

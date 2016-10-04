@@ -71,6 +71,9 @@ class Board():
     def get_cell(self, x, y):
         return self.__cells[x + y * self.WIDTH]
 
+    def get_cells(self):
+        return self.__cells
+
     def get_neighbours(self, cell):
         neighbours = []
         for offset in (1, 0), (-1, 0), (0, 1), (0, -1):

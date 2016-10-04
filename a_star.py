@@ -24,7 +24,7 @@ def A_star(board):
                         heappush(opened, (neighbour.get_f(), neighbour))
 
 if __name__ == '__main__':
-    board = Board("board-2-4.txt")
+    board = Board("board-2-2.txt", True, True)
     print(board)
     time = A_star(board)
     print("\nA* Time:", time, "s")
