@@ -14,18 +14,24 @@ class Cell():
     def __str__(self):
         return self.SYMBOL
 
+    def __gt__(self, other):
+        return self.__g > other.get_g()
+
+    def get_parent(self):
+        return self.__parent
+
     def get_f(self):
         return self.__f
 
     def get_g(self):
         return self.__g
 
-    def get_h(self):
-        return self.__h
+    def set_parent(self, parent):
+        self.__parent = parent
 
     def set_h(self, h):
         self.__h = h
 
-    def set_g(self, f):
+    def set_g(self, g):
         self.__g = g
         self.__f = self.__h + self.__g

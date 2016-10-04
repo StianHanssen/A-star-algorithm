@@ -7,14 +7,12 @@ __author__ = 'Stian Hanssen'
 class Board():
     def __init__(self, file_name):
         self.__cells = []
-
         self.START = None
         self.END = None
         self.BOARD_STR = Board.__read_file(Board.__get_board_path(file_name))
         self.WIDTH = Board.__find_width(self.BOARD_STR[0])
-        self.HEIGHT = ceil(len(self.__cells) / self.WIDTH)
-
         self.__gen_cells(self.BOARD_STR)
+        self.HEIGHT = ceil(len(self.__cells) / self.WIDTH)
 
     def __str__(self):
         return self.BOARD_STR
@@ -69,7 +67,7 @@ class Board():
             cell.set_h(self.__get_heuristic(cell))
 
     def __is_cell(self, x, y):
-        return x >= 0 and y >= 0 and x < self.WIDTH and y < self.HEIGHT
+        return (x >= 0 and x < self.WIDTH) and (y >= 0 and y < self.HEIGHT)
 
     def get_cell(self, x, y):
         return self.__cells[x + y * self.WIDTH]
@@ -77,7 +75,7 @@ class Board():
     def get_neighbours(self, cell):
         neighbours = []
         for offset in (1, 0), (-1, 0), (0, 1), (0, -1):
-            x, y = cell.X + offset[0], Cell.Y + offset[1]
+            x, y = cell.X + offset[0], cell.Y + offset[1]
             if self.__is_cell(x, y):
                 neighbour = self.get_cell(x, y)
                 if neighbour.WEIGHT is not None:  # None meaning a wall
@@ -85,5 +83,15 @@ class Board():
         return neighbours
 
     def update_neightbour(self, neighbour, cell):
-        neighbour.set_g(cell.g + neighbour.WEIGHT)
-        neighbour.parent = cell
+        neighbour.set_g(cell.get_g() + neighbour.WEIGHT)
+        neighbour.set_parent(cell)
+
+    def get_path(self):
+        cell = self.END
+        path = [(cell.X, cell.Y)]
+        while cell.get_parent() is not self.START:
+            cell = cell.get_parent()
+            path.append((cell.X, cell.Y))
+        path.append((self.START.X, self.START.Y))
+        path.reverse()
+        return path
