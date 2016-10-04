@@ -15,7 +15,7 @@ class Cell():
         return self.SYMBOL
 
     def __gt__(self, other):
-        return self.__g > other.get_g()
+        return self.__f > other.get_f()
 
     def get_parent(self):
         return self.__parent
