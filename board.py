@@ -10,7 +10,7 @@ class Board():
         self.START = None
         self.END = None
         self.BOARD_STR = Board.__read_file(Board.__get_board_path(file_name))
-        self.WIDTH = Board.__find_width(self.BOARD_STR[0])
+        self.WIDTH = self.__find_width()
         self.__gen_cells(self.BOARD_STR)
         self.HEIGHT = ceil(len(self.__cells) / self.WIDTH)
 
@@ -30,13 +30,6 @@ class Board():
         return read_data
 
     @staticmethod
-    def __find_width(first_symbol):
-        if first_symbol in ('.', "#"):
-            return 20
-        else:
-            return 40
-
-    @staticmethod
     def __clean_up(text):
         clean_text = ""
         for c in text:
@@ -51,6 +44,9 @@ class Board():
         if diff_x > 0 and diff_y > 0:
             v = 1
         return (abs(cell.X - self.END.X) + abs(cell.Y - self.END.Y)) - v
+
+    def __find_width(self):
+        return len(self.BOARD_STR.split("\n")[0])
 
     def __gen_cells(self, board_string):
         board_string = Board.__clean_up(board_string)
@@ -95,3 +91,12 @@ class Board():
         path.append((self.START.X, self.START.Y))
         path.reverse()
         return path
+
+    def print_path(self):
+        path = self.get_path()
+        text = list(Board.__clean_up(self.BOARD_STR))
+        for x, y in path[1:-1]:
+            text[x + y * self.WIDTH] = 'o'
+        board = "".join(text)
+        for i in range(self.HEIGHT):
+            print(board[i*self.WIDTH: i*self.WIDTH + self.WIDTH])

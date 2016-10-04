@@ -10,7 +10,7 @@ def A_star(board):
             _, cell = heappop(opened)
             closed.add(cell)
             if cell is board.END:
-                return board.get_path()
+                return board.print_path()
             for neighbour in board.get_neighbours(cell):
                 if neighbour.WEIGHT is not None and neighbour not in closed:
                     if (neighbour.get_f(), neighbour) in opened:
@@ -21,6 +21,6 @@ def A_star(board):
                         heappush(opened, (neighbour.get_f(), neighbour))
 
 if __name__ == '__main__':
-    board = Board("board-1-1.txt")
+    board = Board("board-2-4.txt")
     print(board)
-    print(A_star(board))
+    A_star(board)
