@@ -1,6 +1,6 @@
 from board import Board
 from cell import Cell
-from heapq import heappush, heappop, heapify
+from heapq import heappush, heappop
 from time import time
 from math import inf
 

@@ -3,7 +3,6 @@ from math import floor, ceil
 from cell import Cell
 import emoji as em
 
-__author__ = 'Stian Hanssen'
 
 class Board():
     def __init__(self, file_name, default_g=None, default_h=None, mac=False, emoji=False):
@@ -123,5 +122,5 @@ class Board():
         board = "".join(text)
         path_str = ""
         for i in range(self.HEIGHT):
-            path_str += board[i*self.WIDTH: i*self.WIDTH + self.WIDTH] + '\n'
+            path_str += board[i * self.WIDTH: i * self.WIDTH + self.WIDTH] + '\n'
         return path_str[:-2]
