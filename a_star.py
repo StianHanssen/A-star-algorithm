@@ -15,7 +15,7 @@ def a_star(board):
                 return time() - start_time, board.get_path_str(opened, closed)
             closed.add(cell)
             for neighbour in board.get_neighbours(cell):
-                if neighbour.WEIGHT is not None and neighbour not in closed:
+                if neighbour not in closed:
                     if neighbour not in opened:
                         board.update_neighbour(neighbour, cell)
                         heappush(opened, neighbour)
