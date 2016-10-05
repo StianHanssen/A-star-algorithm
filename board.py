@@ -118,10 +118,12 @@ class Board():
         path = self.get_path()
         text = list(Board.__clean_up(self.BOARD_STR))
         if closed is not None:
-            closed = closed - {self.START}
+            closed -= {self.START, self.END}
             for c in closed:
                 text[c.X + c.Y * self.WIDTH] = 'x'
         if opened is not None:
+            opened = set(opened)
+            opened -= {self.START, self.END}
             for c in opened:
                 text[c.X + c.Y * self.WIDTH] = '*'
         for x, y in path[1:-1]:
