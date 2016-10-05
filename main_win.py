@@ -8,12 +8,12 @@ from math import inf
 def average_time(algorithm, board, cycles):
     time_sum = 0
     for _ in range(cycles):
-        new_board = board.clone()
+        new_board = board.initial_clone()
         time_sum += algorithm(new_board)[0]
     return time_sum/cycles
 
 if __name__ == '__main__':
-    board_name = "board-2-3.txt"
+    board_name = "example.txt"
 
     board = Board(board_name, default_g=inf)
     print(board)

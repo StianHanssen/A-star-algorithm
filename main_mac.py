@@ -9,7 +9,7 @@ from dijkstra import dijkstra
 def average_time(algorithm, board, cycles):
     time_sum = 0
     for _ in range(cycles):
-        new_board = board.clone()
+        new_board = board.initial_clone()
         time_sum += algorithm(new_board)[0]
     return time_sum / cycles
 
