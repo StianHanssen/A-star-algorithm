@@ -1,7 +1,9 @@
 from board import Board
 from cell import Cell
 from bfs import bfs
-from a_star import A_star
+from a_star import a_star
+from math import inf
+from dijkstra import dijkstra
 
 
 def average_time(algorithm, board, cycles):
@@ -12,21 +14,21 @@ def average_time(algorithm, board, cycles):
     return time_sum / cycles
 
 if __name__ == '__main__':
-    board = Board("board-2-3.txt", mac=True, emoji=True)
+    board = Board("board-2-4.txt", mac=True, emoji=True)
     print(board)
     path = a_star(board)[1]
     time = average_time(a_star, board, 500)
     print(path)
     print("\nA* time:", time, "s\n")
 
-    board = Board("board-2-3.txt", inf, 0, True, True)
+    board = Board("board-2-4.txt", inf, 0, True, True)
     print(board)
     path = bfs(board)[1]
     time = average_time(bfs, board, 500)
     print(path)
     print("\nBFS time:", time, "s\n")
 
-    board = Board("board-2-3.txt", inf, 0, True, True)
+    board = Board("board-2-4.txt", inf, 0, True, True)
     print(board)
     time = average_time(dijkstra, board, 500)
     path = dijkstra(board)[1]
