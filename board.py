@@ -117,12 +117,13 @@ class Board():
     def get_path_str(self, opened=None, closed=None):
         path = self.get_path()
         text = list(Board.__clean_up(self.BOARD_STR))
-        if opened not None:
-            for x, y in opened:
-                text[x + y * self.WIDTH] = '*'
-        if closed not None:
-            for x, y in closed:
-                text[x + y * self.WIDTH] = 'x'
+        if closed is not None:
+            closed = closed - {self.START}
+            for c in closed:
+                text[c.X + c.Y * self.WIDTH] = 'x'
+        if opened is not None:
+            for c in opened:
+                text[c.X + c.Y * self.WIDTH] = '*'
         for x, y in path[1:-1]:
             text[x + y * self.WIDTH] = em.emojize(':runner:', use_aliases=True) if self.__EMOJI else "o"
         board = "".join(text)

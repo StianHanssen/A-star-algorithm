@@ -12,7 +12,7 @@ def a_star(board):
         while opened:
             cell = heappop(opened)
             if cell is board.END:
-                return time() - start_time, board.get_path_str()
+                return time() - start_time, board.get_path_str(opened, closed)
             closed.add(cell)
             for neighbour in board.get_neighbours(cell):
                 if neighbour.WEIGHT is not None and neighbour not in closed:
