@@ -50,6 +50,9 @@ See **a_star.py, dijkstra.py, bfs.py** for the algorithms. We wrote all by ourse
 
 ## A.3.2
 
+**x = closed  
+* = open**
+
 #### Board-1-1 A*, Dijkstra and BFS
 
 ![board-1-1](pictures/as-dij-bfs-1-1.png)
@@ -84,3 +87,12 @@ See **a_star.py, dijkstra.py, bfs.py** for the algorithms. We wrote all by ourse
 
 ## A.3.3
 
+**We talked with TA Fredrik Berg and he said we only should point out the general differences for the three algorithms, instead of for each game board which would result in a lot of copy/paste.**
+
+*a)*  
+
+The path will be different because the use of queue and heap. A* will use the heuristic to find the path. Dijkstra and BFS will be more random as you can see at board-1-1. That depends on how we implemented the method get_neighbours(self, cell).   
+   
+*b)*  
+
+A* will close fewer nodes because it uses the heuristic and can stop when it reaches B. BFS will close all until it reaches B and can do so because it does not use the weight, but number of edges to find shortest path. So BFS will expand in all direction until it reaches B, and when it does, the shortest path will be ca. radius of all closed nodes. Dijkstra will close every node and do care about the weight and therefore need to check every node. If you have one road (weight: 1) at the edge of a map and end when you reach B, then you will miss that road and potentially a shorter path. 
