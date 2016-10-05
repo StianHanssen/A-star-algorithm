@@ -6,17 +6,19 @@ class Cell():
     The weight is how much it cost to travel from any adjacent cell to this cell.
     There is a relation between the symbol and weight of a cell accourding to
     the text given in the exercise.
-    f is a property of the cell which is calculated by h + g.
-    WEIGHTS is used to translate a symbol to a weight.
+
     Properties:
-        __WEIGHT (int): Cost for traveling from an adjacent cell to this cell
-        __EMOJI (bool): If set True will allow usage of emojies in visualization
+        WEIGHT (int): Cost for traveling from an adjacent cell to this cell
+        SYMBOL (string, chr): The string representation of this cell
         __cells (list): Holds all the cells in board
-        START (Cell): The cell the search algorithm should start at
-        END (Cell): The goal of the search algorithm
-        BOARD_STR (str): A string representation of board
-        WIDTH (int): Width of board
-        HEIGHT (int): Height of board
+        X (int): x position of cell in board it is put into
+        y (int): y position of cell in borad it is put into
+        __parent (cell): Parent of cell
+        __g (int): Total weight of path from start cell to this cell
+        __h (int): Heuristic value of cell
+        __f (int): Value derived by __g + __h
+
+        WEIGHTS (dict): Dictionary used to translate symbol to weight
     """
     WEIGHTS = {'.': 1, '#': None, 'A': 0, 'B': 1, 'w': 100, 'm': 50, 'f': 10, 'g': 5, 'r': 1}
 
@@ -28,9 +30,9 @@ class Cell():
             symbol (string, char): Single ascii charater representing cell as string
         """
         self.WEIGHT = Cell.WEIGHTS[symbol]  # Finds weight of cell based on symbol
+        self.SYMBOL = symbol
         self.X = x
         self.Y = y
-        self.__symbol = symbol
         self.__parent = None
         self.__g = 0
         self.__h = 0
@@ -54,9 +56,6 @@ class Cell():
     def get_parent(self):
         return self.__parent
 
-    def get_symbol(self):
-        return self.__symbol
-
     def get_f(self):
         return self.__f
 
@@ -65,9 +64,6 @@ class Cell():
 
     def set_parent(self, parent):
         self.__parent = parent
-
-    def set_symbol(self, symbol):
-        self.__symbol = symbol
 
     def set_h(self, h):
         self.__h = h
