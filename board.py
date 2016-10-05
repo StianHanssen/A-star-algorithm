@@ -279,3 +279,4 @@ class Board():
         for i in range(self.HEIGHT):
             path_str += board[i * self.WIDTH: i * self.WIDTH + self.WIDTH] + '\n'
         return path_str[:-1]
+        
