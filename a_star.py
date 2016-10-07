@@ -2,10 +2,12 @@ from board import Board
 from cell import Cell
 from heapq import heappush, heappop
 from time import time
+from visualizer import draw_board
 
 
-def a_star(board):
+def a_star(board, draw=False, save_name=None):
     """Calculates shortest path on board using the A* alogrithm.
+
     Args:
         board (Board): Board being the graph the alorithm will use
 
@@ -19,6 +21,8 @@ def a_star(board):
     while opened:  # While there are still cells to check out
         cell = heappop(opened)
         if cell is board.END:  # Once cell being check is end cell, we are done
+            if draw:
+                draw_board(board, opened, closed, save_name)
             return time() - start_time, board.get_path_str(opened, closed)
         closed.add(cell)
         for neighbour in board.get_neighbours(cell):

@@ -8,7 +8,7 @@ class Board():
     """A board representing the text given by exercise.
 
     Properties:
-        __INPUT (tuple): Tuple keeping the exact input, used for clone
+        __INPUT (tuple): Tuple keeping the exact input, used for clone()
         __EMOJI (bool): If set True will allow usage of emojies in visualization
         __cells (list): Holds all the cells in board
         START (Cell): The cell the search algorithm should start at
@@ -21,8 +21,8 @@ class Board():
         """
         Attributes:
             file_name (str): Name of the txt we want to import a board from
-            default_g (int): A initial g value set for all cells, 0 if None
-            default_h (int): A initial h value set for all cells, manhatten if None
+            default_g (int): An initial g value set for all cells, 0 if None
+            default_h (int): An initial h value set for all cells, manhatten distance if None
             mac (bool): If True will work for mac, works for windows otherwise
             emoji (bool): If set True will allow usage of emojies in visualization
         """
@@ -72,7 +72,7 @@ class Board():
         return read_data
 
     @staticmethod
-    def __clean_up(text):
+    def clean_up(text):
         """Removes any illegal symbols from text
         Args:
             text (str): A string representation of a board
@@ -89,10 +89,10 @@ class Board():
     def __get_heuristic(self, cell):
         """Finds manhatten distance from cell to end cell (END)
         Args:
-            cell (Cell): The cell you want to manhatten distance to
+            cell (Cell): The cell you want the manhatten distance to
 
         Returns:
-            An int represening the manhatten histance between cell and end cell
+            An int represening the manhatten distance between cell and end cell
         """
         diff_x = abs(cell.X - self.END.X)
         diff_y = abs(cell.Y - self.END.Y)
@@ -102,7 +102,7 @@ class Board():
         return (abs(cell.X - self.END.X) + abs(cell.Y - self.END.Y)) - v
 
     def __find_width(self):
-        """Finds the width f the board based on the string representation
+        """Finds the width of the board based on the string representation
         Returns:
             An int represening width of the board
         """
@@ -118,7 +118,7 @@ class Board():
         Args:
             board_string (str): String represenatation of the board
         """
-        board_string = Board.__clean_up(board_string)
+        board_string = Board.clean_up(board_string)
         for i in range(len(board_string)):
             x = i % self.WIDTH  # Caluclates x value from a flat list
             y = floor(i / self.WIDTH)  # Calculates y value from a flat list
@@ -131,7 +131,7 @@ class Board():
 
     def __set_default_h(self, h):
         """Sets an initial h value for all cells.
-        Finds manhatten distance if h is None and set that as h
+        Finds manhatten distance if h is None
 
         Args:
             h (int): Initial h value being set for all cells
@@ -164,14 +164,14 @@ class Board():
         """
         return (x >= 0 and x < self.WIDTH) and (y >= 0 and y < self.HEIGHT)
 
-    def __get_path(self):
-        """Gives calcuated by algorithm.
-        Will not give a result untill after a search algorithm has been executed.
+    def get_path(self):
+        """Gives the path calcuated by algorithm.
+        Will not give a proper result until after a search algorithm has been executed.
         Finds path created by algorithm by backtracking from END by looking at
-        parents.
+        parents. Parents are set by algorithm.
 
         Returns:
-            List of valid adjacent cells
+            List of (x, y) tuples showing path from START to END
         """
         cell = self.END
         path = [(cell.X, cell.Y)]
@@ -239,17 +239,15 @@ class Board():
         far if neighbour is front of the path.
 
         Args:
-            cell (Cell): Cell you want to find adjacent cells to
-
-        Returns:
-            List of valid adjacent cells
+            cell (Cell): Cell you want to set as parent
+            neightbour (Cell): Neightbour you want to set cell as parent and update g
         """
         neighbour.set_g(cell.get_g() + neighbour.WEIGHT)
         neighbour.set_parent(cell)
 
     def get_path_str(self, opened=None, closed=None):
         """Gets a string representation of board with path.
-        Will not be able to give a result untill after a search alogithm has been
+        Will not be able to give a result until after a search alogithm has been
         executed on the board. Will also visualize opened and closed cells if
         given. If opend and/or closed is None, the list being None will not
         be visualized.
@@ -261,8 +259,8 @@ class Board():
         Returns:
             String representation of board with path, opened and closed cells
         """
-        path = self.__get_path()
-        text = list(Board.__clean_up(self.BOARD_STR))
+        path = self.get_path()
+        text = list(Board.clean_up(self.BOARD_STR))
         if closed is not None:
             closed -= {self.START, self.END}
             for c in closed:
@@ -279,4 +277,3 @@ class Board():
         for i in range(self.HEIGHT):
             path_str += board[i * self.WIDTH: i * self.WIDTH + self.WIDTH] + '\n'
         return path_str[:-1]
-        

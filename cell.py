@@ -6,11 +6,13 @@ class Cell():
     The weight is how much it cost to travel from any adjacent cell to this cell.
     There is a relation between the symbol and weight of a cell accourding to
     the text given in the exercise.
+    The x, y position is not linked to any board, it is up to the board to
+    initialize the cell with the correct x and y when adding it. This
+    process is done automatically internally in board to ensure integrity.
 
     Properties:
         WEIGHT (int): Cost for traveling from an adjacent cell to this cell
         SYMBOL (string, chr): The string representation of this cell
-        __cells (list): Holds all the cells in board
         X (int): x position of cell in board it is put into
         y (int): y position of cell in borad it is put into
         __parent (cell): Parent of cell
@@ -25,8 +27,8 @@ class Cell():
     def __init__(self, x, y, symbol):
         """
         Attributes:
-            x (int): x position of cell in board it is put into
-            y (int): y position of cell in borad it is put into
+            x (int): x position of cell
+            y (int): y position of cell
             symbol (string, char): Single ascii charater representing cell as string
         """
         self.WEIGHT = Cell.WEIGHTS[symbol]  # Finds weight of cell based on symbol
