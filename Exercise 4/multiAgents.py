@@ -137,24 +137,15 @@ class MinimaxAgent(MultiAgentSearchAgent):
         if game_state.isWin() or game_state.isLose() or depth == 0:  # If terminal node
             return self.evaluationFunction(game_state), None
         next_agent = (agent_index + 1) % game_state.getNumAgents()
-        if agent_index == 0:  # Packman (maximizing)
-            value, best_action = -float('inf'), None
-            for action in game_state.getLegalActions(agent_index):
-                next_state = game_state.generateSuccessor(agent_index, action)
-                next_value = self.miniMax(next_state, depth - 1, next_agent)[0]
-                if value < next_value:
-                    value = next_value
-                    best_action = action
-            return value, best_action
-        else:  # Ghost (minimizing)
-            value, best_action = float('inf'), None
-            for action in game_state.getLegalActions(agent_index):
-                next_state = game_state.generateSuccessor(agent_index, action)
-                next_value = self.miniMax(next_state, depth - 1, next_agent)[0]
-                if value > next_value:
-                    value = next_value
-                    best_action = action
-            return value, best_action
+        sign = -1 if agent_index == 0 else 1  # Small number for maximizing (pacman) and big number for minimizing (ghost)
+        value, best_action = sign * float('inf'), None
+        for action in game_state.getLegalActions(agent_index):
+            next_state = game_state.generateSuccessor(agent_index, action)
+            next_value = self.miniMax(next_state, depth - 1, next_agent)[0]
+            if (agent_index == 0 and value < next_value) or (agent_index > 0 and value > next_value):  # Maximizing for pacman and minimizing for ghost
+                value = next_value
+                best_action = action
+        return value, best_action
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
