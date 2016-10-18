@@ -137,15 +137,24 @@ class MinimaxAgent(MultiAgentSearchAgent):
         if game_state.isWin() or game_state.isLose() or depth == 0:  # If terminal node
             return self.evaluationFunction(game_state), None
         next_agent = (agent_index + 1) % game_state.getNumAgents()
-        sign = -1 if agent_index == 0 else 1  # If pacman: Small initial value, else: Big initial value
-        value, best_action = sign * float('inf'), None  # Sign affects whether we have a very big number (minimize) or small number (maximize)
-        for action in game_state.getLegalActions(agent_index):
-            next_state = game_state.generateSuccessor(agent_index, action)
-            next_value = self.miniMax(next_state, depth - 1, next_agent)[0]
-            if (agent_index == 0 and value < next_value) or (agent_index > 0 and value > next_value):  # Maximizing for pacman and minimizing for ghost
-                value = next_value
-                best_action = action
-        return value, best_action
+        if agent_index == 0:  # Packman (maximizing)
+              value, best_action = -float('inf'), None
+             for action in game_state.getLegalActions(agent_index):
+                  next_state = game_state.generateSuccessor(agent_index, action)
+                  next_value = self.miniMax(next_state, depth - 1, next_agent)[0]
+                  if value < next_value:
+                      value = next_value
+                      best_action = action
+              return value, best_action
+          else:  # Ghost (minimizing)
+              value, best_action = float('inf'), None
+              for action in game_state.getLegalActions(agent_index):
+                  next_state = game_state.generateSuccessor(agent_index, action)
+                  next_value = self.miniMax(next_state, depth - 1, next_agent)[0]
+                  if value > next_value:
+                      value = next_value
+                      best_action = action
+              return value, best_action
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
@@ -165,21 +174,30 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         if game_state.isWin() or game_state.isLose() or depth == 0:  # If terminal node
             return self.evaluationFunction(game_state), None
         next_agent = (agent_index + 1) % game_state.getNumAgents()
-        pacman, sign, comp = (True, -1, max) if agent_index == 0 else (False, 1, min)  # If pacman: Small initial value and maximize, else: Big initial value and minimize
-        current_v, best_action = sign * float('inf'), None  # Sign affects whether we have a very big (minimizing) or very small number (maximize)
-        for action in game_state.getLegalActions(agent_index):
-            next_state = game_state.generateSuccessor(agent_index, action)
-            next_v = self.alphaBeta(next_state, depth - 1, next_agent, a, b)[0]
-            current_v = comp(current_v, next_v)  # If pacman: comp() == max(), else: comp() == min()
-            if (pacman and b < current_v) or (agent_index > 0 and current_v < a):  # If any condition implying we don't need further iteration
-                break
-            if pacman and current_v > a:  # If a better alpha value found (maximize)
-                a = current_v
-                best_action = action
-            elif not pacman and b > current_v:  # If a better beta value found (minimize)
-                b = current_v
-                best_action = action
-        return current_v, best_action
+        if agent_index == 0:  # Packman (maximizing)
+            current_a, best_action = -float('inf'), None
+            for action in game_state.getLegalActions(agent_index):
+                next_state = game_state.generateSuccessor(agent_index, action)
+                next_a = self.alphaBeta(next_state, depth - 1, next_agent, a, b)[0]
+                current_a = max(current_a, next_a)
+                if b < current_a :
+                    break
+                if current_a > a:
+                    a = current_a
+                    best_action = action
+            return current_a, best_action
+        else:  # Ghost (minimizing)
+            current_b, best_action = float('inf'), None
+            for action in game_state.getLegalActions(agent_index):
+                next_state = game_state.generateSuccessor(agent_index, action)
+                next_b = self.alphaBeta(next_state, depth - 1, next_agent, a, b)[0]
+                current_b = min(current_b, next_b)
+                if current_b < a:
+                    break
+                if b > current_b:
+                    b = current_b
+                    best_action = action
+            return current_b, best_action
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
     """
