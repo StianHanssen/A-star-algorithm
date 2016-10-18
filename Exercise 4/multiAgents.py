@@ -166,20 +166,20 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             return self.evaluationFunction(game_state), None
         next_agent = (agent_index + 1) % game_state.getNumAgents()
         pacman, sign, comp = (True, -1, max) if agent_index == 0 else (False, 1, min)  # If pacman: Small initial value and maximize, else: Big initial value and minimize
-        current_v, best_action = sign * float('inf'), None  # Sign affects whether we have a very big (minimizing) or very small number (maximize)
+        value, best_action = sign * float('inf'), None  # Sign affects whether we have a very big (minimizing) or very small number (maximize)
         for action in game_state.getLegalActions(agent_index):
             next_state = game_state.generateSuccessor(agent_index, action)
-            next_v = self.alphaBeta(next_state, depth - 1, next_agent, a, b)[0]
-            current_v = comp(current_v, next_v)  # If pacman: comp() == max(), else: comp() == min()
-            if (pacman and b < current_v) or (agent_index > 0 and current_v < a):  # If any condition implying we don't need further iteration
+            next_value = self.alphaBeta(next_state, depth - 1, next_agent, a, b)[0]
+            value = comp(value, next_value)  # If pacman: comp() == max(), else: comp() == min()
+            if (pacman and b < value) or (not pacman and value < a):  # If any condition implying we don't need further iteration
                 break
-            if pacman and current_v > a:  # If a better alpha value found (maximize)
-                a = current_v
+            if pacman and value > a:  # If a better alpha value found (maximize)
+                a = value
                 best_action = action
-            elif not pacman and b > current_v:  # If a better beta value found (minimize)
-                b = current_v
+            elif not pacman and b > value:  # If a better beta value found (minimize)
+                b = value
                 best_action = action
-        return current_v, best_action
+        return value, best_action
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
     """
