@@ -138,23 +138,23 @@ class MinimaxAgent(MultiAgentSearchAgent):
             return self.evaluationFunction(game_state), None
         next_agent = (agent_index + 1) % game_state.getNumAgents()
         if agent_index == 0:  # Packman (maximizing)
-              value, best_action = -float('inf'), None
-             for action in game_state.getLegalActions(agent_index):
-                  next_state = game_state.generateSuccessor(agent_index, action)
-                  next_value = self.miniMax(next_state, depth - 1, next_agent)[0]
-                  if value < next_value:
-                      value = next_value
-                      best_action = action
-              return value, best_action
-          else:  # Ghost (minimizing)
-              value, best_action = float('inf'), None
-              for action in game_state.getLegalActions(agent_index):
-                  next_state = game_state.generateSuccessor(agent_index, action)
-                  next_value = self.miniMax(next_state, depth - 1, next_agent)[0]
-                  if value > next_value:
-                      value = next_value
-                      best_action = action
-              return value, best_action
+            value, best_action = -float('inf'), None
+            for action in game_state.getLegalActions(agent_index):
+                next_state = game_state.generateSuccessor(agent_index, action)
+                next_value = self.miniMax(next_state, depth - 1, next_agent)[0]
+                if value < next_value:
+                    value = next_value
+                    best_action = action
+            return value, best_action
+        else:  # Ghost (minimizing)
+            value, best_action = float('inf'), None
+            for action in game_state.getLegalActions(agent_index):
+                next_state = game_state.generateSuccessor(agent_index, action)
+                next_value = self.miniMax(next_state, depth - 1, next_agent)[0]
+                if value > next_value:
+                    value = next_value
+                    best_action = action
+            return value, best_action
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
@@ -180,7 +180,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                 next_state = game_state.generateSuccessor(agent_index, action)
                 next_a = self.alphaBeta(next_state, depth - 1, next_agent, a, b)[0]
                 current_a = max(current_a, next_a)
-                if b < current_a :
+                if b < current_a:
                     break
                 if current_a > a:
                     a = current_a

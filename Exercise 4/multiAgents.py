@@ -165,7 +165,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         if game_state.isWin() or game_state.isLose() or depth == 0:  # If terminal node
             return self.evaluationFunction(game_state), None
         next_agent = (agent_index + 1) % game_state.getNumAgents()
-        pacman, sign, comp = (True, -1, max) if agent_index == 0 else (False, 1, min)  # If pacman: Small initial value and maximize, else: Big initial value and minimize
+        pacman, sign, comp = (True, -1, max) if agent_index == 0 else (False, 1, min)  # If pacman: Small value and maximize, else: Big value and minimize
         value, best_action = sign * float('inf'), None  # Sign affects whether we have a very big (minimizing) or very small number (maximize)
         for action in game_state.getLegalActions(agent_index):
             next_state = game_state.generateSuccessor(agent_index, action)
