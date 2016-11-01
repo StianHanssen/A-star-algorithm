@@ -20,6 +20,10 @@ class CSP:
         # the variable pair (i, j)
         self.constraints = {}
 
+        self.backtrack_called = 0
+        self.backtrack_failed = 0
+
+
     def add_variable(self, name, domain):
         """Add a new variable to the CSP. 'name' is the variable name
         and 'domain' is a list of the legal values for the variable.
@@ -60,12 +64,14 @@ class CSP:
             if i != j:
                 self.add_constraint_one_way(i, j, lambda x, y: x != y)
 
+    @staticmethod
     def getBoardPath(imageName):
-        slash = "\\" if platform.system() == "Windows" else "/"
+        slash = "\\" if platform == "win32" else "/"
         path = os.path.dirname(os.path.abspath(__file__))
         path += slash + "Boards" + slash + imageName
         return path
 
+    @staticmethod
     def create_map_coloring_csp():
         """Instantiate a CSP representing the map coloring problem from the
         textbook. This can be useful for testing your CSP solver as you
@@ -83,6 +89,7 @@ class CSP:
                 csp.add_constraint_one_way(other_state, state, lambda i, j: i != j)
         return csp
 
+    @staticmethod
     def create_sudoku_csp(filename):
         """Instantiate a CSP representing the Sudoku board found in the text
         file named 'filename' in the current directory.
@@ -111,6 +118,7 @@ class CSP:
 
         return csp
 
+    @staticmethod
     def print_sudoku_solution(solution):
         """Convert the representation of a Sudoku solution as returned from
         the method CSP.backtracking_search(), into a human readable
@@ -138,6 +146,12 @@ class CSP:
         """
         return [(i, var) for i in self.constraints[var]]
 
+    def is_complete(self, assignment):
+        for domain in assignment.values():
+            if len(domain) != 1:
+                return False
+        return True
+
     def backtracking_search(self):
         """This functions starts the CSP solver and returns the found
         solution.
@@ -158,20 +172,17 @@ class CSP:
     def backtrack(self, assignment):
         """The function 'Backtrack' from the pseudocode in the
         textbook.
-
         The function is called recursively, with a partial assignment of
         values 'assignment'. 'assignment' is a dictionary that contains
         a list of all legal values for the variables that have *not* yet
         been decided, and a list of only a single value for the
         variables that *have* been decided.
-
         When all of the variables in 'assignment' have lists of length
         one, i.e. when all variables have been assigned a value, the
         function should return 'assignment'. Otherwise, the search
         should continue. When the function 'inference' is called to run
         the AC-3 algorithm, the lists of legal values in 'assignment'
         should get reduced as AC-3 discovers illegal values.
-
         IMPORTANT: For every iteration of the for-loop in the
         pseudocode, you need to make a deep copy of 'assignment' into a
         new variable before changing it. Every iteration of the for-loop
@@ -179,8 +190,20 @@ class CSP:
         assignments and inferences that took place in previous
         iterations of the loop.
         """
-        # TODO: IMPLEMENT THIS
-        pass
+        self.backtrack_called += 1
+        if self.is_complete(assignment):
+            return assignment
+        var = self.select_unassigned_variable(assignment)
+        for value in assignment[var]:
+            test_assignment = copy.deepcopy(assignment)
+            test_assignment[var] = [value]
+            if value in self.domains[var]:
+                if self.inference(test_assignment, self.get_all_arcs()):
+                    result = self.backtrack(test_assignment)
+                    if result is not None:
+                        return result
+        self.backtrack_failed += 1
+        return None
 
     def select_unassigned_variable(self, assignment):
         """The function 'Select-Unassigned-Variable' from the pseudocode
@@ -188,8 +211,8 @@ class CSP:
         in 'assignment' that have not yet been decided, i.e. whose list
         of legal values has a length greater than one.
         """
-        # TODO: IMPLEMENT THIS
-        pass
+        return min([(len(domain), name) for name, domain in assignment.iteritems() if len(domain) != 1])[1]
+
 
     def inference(self, assignment, queue):
         """The function 'AC-3' from the pseudocode in the textbook.
@@ -197,8 +220,15 @@ class CSP:
         the lists of legal values for each undecided variable. 'queue'
         is the initial queue of arcs that should be visited.
         """
-        # TODO: IMPLEMENT THIS
-        pass
+        while queue:
+            (i, j) = queue.pop(0)
+            if self.revise(assignment, i, j):
+                if not self.domains.get(i):
+                    return False
+                for neigh_arc in self.get_all_neighboring_arcs(i):
+                    if neigh_arc != (i, j):
+                        queue.append(neigh_arc)
+        return True
 
     def revise(self, assignment, i, j):
         """The function 'Revise' from the pseudocode in the textbook.
@@ -209,9 +239,15 @@ class CSP:
         between i and j, the value should be deleted from i's list of
         legal values in 'assignment'.
         """
-        # TODO: IMPLEMENT THIS
-        pass
+        legal_moves = set(self.constraints[i][j])
+        revised = False
+        for x in assignment[i]:
+            moves = set(itertools.product(x, assignment[j]))
+            if not moves.intersection(legal_moves):
+                assignment[i].remove(x)
+                revised = True
+        return revised
 
 if __name__ == '__main__':
-    sudoku_solver = CPS.create_sudoku_csp(getBoardPath("easy.txt"))
-    
+    sudoku_solver = CSP.create_sudoku_csp(CSP.getBoardPath("veryhard.txt"))
+    sudoku_solver.print_sudoku_solution(sudoku_solver.backtracking_search())
