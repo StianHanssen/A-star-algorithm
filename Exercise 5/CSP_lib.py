@@ -8,7 +8,10 @@ from sys import platform
 '''
 Class given for exercise
 '''
+
+
 class CSP:
+
     def __init__(self):
         # self.__variables is a list of the variable names in the CSP
         self.__variables = []
@@ -162,12 +165,15 @@ class CSP:
         are supposed to be two-way connections!
         """
         if j not in self.__constraints[i]:
-            # First, get a list of all possible pairs of values between variables i and j
-            self.__constraints[i][j] = self.get_all_possible_pairs(self.__domains[i], self.__domains[j])
+            # First, get a list of all possible pairs of values between
+            # variables i and j
+            self.__constraints[i][j] = self.get_all_possible_pairs(
+                self.__domains[i], self.__domains[j])
 
         # Next, filter this list of value pairs through the function
         # 'filter_function', so that only the legal value pairs remain
-        self.__constraints[i][j] = filter(lambda value_pair: filter_function(*value_pair), self.__constraints[i][j])
+        self.__constraints[i][j] = filter(
+            lambda value_pair: filter_function(*value_pair), self.__constraints[i][j])
 
     def add_all_different_constraint(self, variables):
         """Add an Alldiff constraint between all of the variables in the
@@ -194,12 +200,15 @@ class CSP:
         are supposed to be two-way connections!
         """
         if j not in self.__constraints[i]:
-            # First, get a list of all possible pairs of values between variables i and j
-            self.__constraints[i][j] = self.get_all_possible_pairs(self.__domains[i], self.__domains[j])
+            # First, get a list of all possible pairs of values between
+            # variables i and j
+            self.__constraints[i][j] = self.get_all_possible_pairs(
+                self.__domains[i], self.__domains[j])
 
         # Next, filter this list of value pairs through the function
         # 'filter_function', so that only the legal value pairs remain
-        self.__constraints[i][j] = filter(lambda value_pair: filter_function(*value_pair), self.__constraints[i][j])
+        self.__constraints[i][j] = filter(
+            lambda value_pair: filter_function(*value_pair), self.__constraints[i][j])
 
     def add_all_different_constraint(self, variables):
         """Add an Alldiff constraint between all of the variables in the
@@ -230,14 +239,17 @@ class CSP:
         """
         csp = CSP()
         states = ['WA', 'NT', 'Q', 'NSW', 'V', 'SA', 'T']
-        edges = {'SA': ['WA', 'NT', 'Q', 'NSW', 'V'], 'NT': ['WA', 'Q'], 'NSW': ['Q', 'V']}
+        edges = {'SA': ['WA', 'NT', 'Q', 'NSW', 'V'],
+                 'NT': ['WA', 'Q'], 'NSW': ['Q', 'V']}
         colors = ['red', 'green', 'blue']
         for state in states:
             csp.add_variable(state, colors)
         for state, other_states in edges.items():
             for other_state in other_states:
-                csp.add_constraint_one_way(state, other_state, lambda i, j: i != j)
-                csp.add_constraint_one_way(other_state, state, lambda i, j: i != j)
+                csp.add_constraint_one_way(
+                    state, other_state, lambda i, j: i != j)
+                csp.add_constraint_one_way(
+                    other_state, state, lambda i, j: i != j)
         return csp
 
     @staticmethod
@@ -251,14 +263,17 @@ class CSP:
         for row in range(9):
             for col in range(9):
                 if board[row][col] == '0':
-                    csp.add_variable('%d-%d' % (row, col), map(str, range(1, 10)))
+                    csp.add_variable('%d-%d' % (row, col),
+                                     map(str, range(1, 10)))
                 else:
                     csp.add_variable('%d-%d' % (row, col), [board[row][col]])
 
         for row in range(9):
-            csp.add_all_different_constraint(['%d-%d' % (row, col) for col in range(9)])
+            csp.add_all_different_constraint(
+                ['%d-%d' % (row, col) for col in range(9)])
         for col in range(9):
-            csp.add_all_different_constraint(['%d-%d' % (row, col) for row in range(9)])
+            csp.add_all_different_constraint(
+                ['%d-%d' % (row, col) for row in range(9)])
         for box_row in range(3):
             for box_col in range(3):
                 cells = []
