@@ -230,6 +230,7 @@ class CSP:
                         queue.append(neigh_arc)
         return True
 
+
     def revise(self, assignment, i, j):
         """The function 'Revise' from the pseudocode in the textbook.
         'assignment' is the current partial assignment, that contains
