@@ -225,7 +225,7 @@ class CSP:
         return self.__backtrack_failed
 
     @staticmethod
-    def getBoardPath(imageName):
+    def get_board_path(imageName):
         slash = "\\" if platform == "win32" else "/"
         path = os.path.dirname(os.path.abspath(__file__))
         path += slash + "Boards" + slash + imageName
@@ -301,7 +301,7 @@ class CSP:
 
 
 if __name__ == '__main__':
-    sudoku_solver = CSP.create_sudoku_csp(CSP.getBoardPath("world_hardest.txt"))
+    sudoku_solver = CSP.create_sudoku_csp(CSP.get_board_path("world_hardest.txt"))
     sudoku_solver.print_sudoku_solution(sudoku_solver.backtracking_search())
     print "\nBacktrack called:", sudoku_solver.get_backtrack_called()
     print "Backtrack failed:", sudoku_solver.get_backtrack_failed()
