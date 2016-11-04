@@ -47,6 +47,9 @@ class CSP:
         return [(i, var) for i in self.__constraints[var]]
 
     def __is_complete(self, assignment):
+        '''Created for assignment
+        Check whether board has been filled in completely
+        '''
         for domain in assignment.values():
             if len(domain) != 1:
                 return False
@@ -73,20 +76,19 @@ class CSP:
         assignments and inferences that took place in previous
         iterations of the loop.
         """
-        self.__backtrack_called += 1
-        if self.__is_complete(assignment):
+        self.__backtrack_called += 1  # Counts up for backtrack call
+        if self.__is_complete(assignment):  # If board is filled in
             return assignment
-        var = self.__select_unassigned_variable(assignment)
-        for value in assignment[var]:
-            test_assignment = copy.deepcopy(assignment)
-            test_assignment[var] = [value]
-            if value in self.__domains[var]:
-                if self.__inference(test_assignment, self.__get_all_arcs()):
-                    result = self.__backtrack(test_assignment)
-                    if result is not None:
-                        return result
-        self.__backtrack_failed += 1
-        return None
+        var = self.__select_unassigned_variable(assignment)  # Obtain a variable with smallest domain that is not filled in
+        for value in assignment[var]:  # For potential values in domain of variable
+            test_assignment = copy.deepcopy(assignment)  # Create new branch
+            test_assignment[var] = [value]  # Set value for this variable on this branch
+            if self.__inference(test_assignment, self.__get_all_neighboring_arcs(var)):  # If updating neighbours is sucessful
+                result = self.__backtrack(test_assignment)  # Contunie down branch
+                if result is not None:  # If we reach a solution
+                    return result
+        self.__backtrack_failed += 1  # Counts up for failed backtrack call
+        return None  # Return nothing as a solution was not found in branch
 
     def __select_unassigned_variable(self, assignment):
         """The function 'Select-Unassigned-Variable' from the pseudocode
@@ -219,16 +221,25 @@ class CSP:
                 self.add_constraint_one_way(i, j, lambda x, y: x != y)
 
     def get_backtrack_called(self):
+        '''Created for assignment
+        Returns number of times backtracking called
+        '''
         return self.__backtrack_called
 
     def get_backtrack_failed(self):
+        '''Created for assignment
+        Returns number of times backtracking failed
+        '''
         return self.__backtrack_failed
 
     @staticmethod
-    def get_board_path(imageName):
+    def get_board_path(board_name):
+        '''Created for assignment
+        Obtains the full path to board
+        '''
         slash = "\\" if platform == "win32" else "/"
         path = os.path.dirname(os.path.abspath(__file__))
-        path += slash + "Boards" + slash + imageName
+        path += slash + "Boards" + slash + board_name
         return path
 
     @staticmethod
