@@ -301,7 +301,7 @@ class CSP:
 
 
 if __name__ == '__main__':
-    sudoku_solver = CSP.create_sudoku_csp(CSP.get_board_path("world_hardest.txt"))
+    sudoku_solver = CSP.create_sudoku_csp(CSP.get_board_path("veryhard.txt"))
     sudoku_solver.print_sudoku_solution(sudoku_solver.backtracking_search())
     print "\nBacktrack called:", sudoku_solver.get_backtrack_called()
     print "Backtrack failed:", sudoku_solver.get_backtrack_failed()
